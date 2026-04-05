@@ -2,8 +2,8 @@
 #include <Arduino.h>
 // Определяем пины
 const int pinCLK = 2;
-const int pinDT = 4;
-const int pinKey = 3;
+const int pinDT = 3;
+const int pinKey = 4;
 
 // Переменные для счета (volatile обязателен для переменных в прерываниях)
 volatile int vi_counter = 0;
@@ -40,23 +40,33 @@ void intUpdateEncoder() {
   lastCLK = currentCLK;
 }
 
-volatile int vi_rotary_key_press = 0;
-void intKeyPress() {
-  vi_rotary_key_press = 1;
-}
+// volatile int vi_rotary_key_press = 0;
+// void intKeyPress() {
+//   vi_rotary_key_press = 1;
+// }
+
+// int rotary_pressed1() {
+//   static unsigned long lastPressTime = 0;
+//   unsigned long now = millis();
+
+//   if (vi_rotary_key_press && (now - lastPressTime > 500)) {
+//     vi_rotary_key_press = 0;
+//     lastPressTime = now;
+//     return 1;
+//   }
+
+//   vi_rotary_key_press = 0;
+//   return 0;
+// }
 
 int rotary_pressed() {
-  static unsigned long lastPressTime = 0;
-  unsigned long now = millis();
-
-  if (vi_rotary_key_press && (now - lastPressTime > 500)) {
-    vi_rotary_key_press = 0;
-    lastPressTime = now;
-    return 1;
+  uint8_t click = 0;
+  while (digitalRead(pinKey) == LOW) {
+    delay(100);
+    click = 1;
   }
 
-  vi_rotary_key_press = 0;
-  return 0;
+  return click;
 }
 
 int rotary_rotated() {
@@ -80,7 +90,7 @@ void rotary_setup() {
   attachInterrupt(digitalPinToInterrupt(pinCLK), intUpdateEncoder, CHANGE);
 
   pinMode(pinKey, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(pinKey), intKeyPress, FALLING);
+  // attachInterrupt(digitalPinToInterrupt(pinKey), intKeyPress, FALLING);
 }
 
 int rotary_get_direction() {

@@ -23,6 +23,7 @@ void setup() {
   rotary_setup();
   synth_setup();
   this_cursor_show();
+  pinMode(LED_BUILTIN, OUTPUT);
 }
 
 void this_cursor_move() {
@@ -61,6 +62,16 @@ void this_switch_cursor() {
   this_cursor_show();
 }
 
+static unsigned long lastPressTime = 0;
+uint8_t blink = 0;
+void this_blink() {
+  unsigned long now = millis();
+  if (now - lastPressTime > 4000) {
+    lastPressTime = now;
+    digitalWrite(LED_BUILTIN, blink);
+    blink = blink > 0 ? 0 : 1;
+  }
+}
 /////////////
 void loop() {
   if (rotary_rotated() > 0) {
@@ -82,4 +93,5 @@ void loop() {
   this_show_synth_freq();
 
   //delay(100);
+  this_blink();
 }

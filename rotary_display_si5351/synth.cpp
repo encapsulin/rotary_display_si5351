@@ -49,6 +49,13 @@ void synth_setup() {
   f_K = eeprom_read_int(2);
   f_H = eeprom_read_int(4);
 
+  if (f_M < 1 || f_M > 99)
+    f_M = 1;
+  if (f_K < 1 || f_K > 999)
+    f_K = 1;
+  if (f_H < 1 || f_H > 999)
+    f_H = 1;
+
   Serial.println(f_M);
   Serial.println(f_K);
   Serial.println(f_H);
@@ -66,9 +73,9 @@ String _format_int_to_str(int data, int len) {
 
 
 String synth_get() {
-  String f_M_s = _format_int_to_str(f_M,2);
-  String f_K_s = _format_int_to_str(f_K,3);
-  String f_H_s = _format_int_to_str(f_H,3);
+  String f_M_s = _format_int_to_str(f_M, 2);
+  String f_K_s = _format_int_to_str(f_K, 3);
+  String f_H_s = _format_int_to_str(f_H, 3);
   String result = f_M_s + "." + f_K_s + "." + f_H_s;
   return result;
 }
@@ -92,30 +99,30 @@ void synth_adjust(int incdec, int cursor_position) {
     case 9: f_H += incdec; break;
   }
 
-  if (f_M > 99){
+  if (f_M > 99) {
     f_M = 99;
   }
   if (f_M < 0)
     f_M = 0;
 
-  if (f_K > 999){
+  if (f_K > 999) {
     f_K = 0;
     f_M++;
   }
-  if (f_K < 0){
+  if (f_K < 0) {
     f_K = 0;
     f_M--;
   }
-  if (f_H > 999){
+  if (f_H > 999) {
     f_H = 0;
     f_K++;
   }
-  if (f_H < 0){
+  if (f_H < 0) {
     f_H = 0;
     f_K--;
   }
 
-  si5351_adjustF(f_M,f_K,f_H);
+  si5351_adjustF(f_M, f_K, f_H);
 }
 
 void synth_enable(char enable) {
