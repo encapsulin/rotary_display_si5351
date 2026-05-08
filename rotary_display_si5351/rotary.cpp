@@ -40,25 +40,6 @@ void intUpdateEncoder() {
   lastCLK = currentCLK;
 }
 
-// volatile int vi_rotary_key_press = 0;
-// void intKeyPress() {
-//   vi_rotary_key_press = 1;
-// }
-
-// int rotary_pressed1() {
-//   static unsigned long lastPressTime = 0;
-//   unsigned long now = millis();
-
-//   if (vi_rotary_key_press && (now - lastPressTime > 500)) {
-//     vi_rotary_key_press = 0;
-//     lastPressTime = now;
-//     return 1;
-//   }
-
-//   vi_rotary_key_press = 0;
-//   return 0;
-// }
-
 int rotary_pressed() {
   uint8_t click = 0;
   while (digitalRead(pinKey) == LOW) {
@@ -90,7 +71,6 @@ void rotary_setup() {
   attachInterrupt(digitalPinToInterrupt(pinCLK), intUpdateEncoder, CHANGE);
 
   pinMode(pinKey, INPUT_PULLUP);
-  // attachInterrupt(digitalPinToInterrupt(pinKey), intKeyPress, FALLING);
 }
 
 int rotary_get_direction() {

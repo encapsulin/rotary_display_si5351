@@ -18,12 +18,23 @@ void this_cursor_show() {
 void setup() {
   Serial.begin(9600);
 
-  // disp_setup();
-  oled_setup();
+  Serial.println("setup");
+
   rotary_setup();
+
+  Serial.println("synth_setup");
   synth_setup();
-  this_cursor_show();
+  
   pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, 1);
+
+  Serial.println("oled_setup");
+  oled_setup();
+ 
+  this_cursor_show();
+
+
+  Serial.println("setup ok");
 }
 
 void this_cursor_move() {
@@ -63,7 +74,7 @@ void this_switch_cursor() {
 }
 
 static unsigned long lastPressTime = 0;
-uint8_t blink = 0;
+uint8_t blink = 1;
 void this_blink() {
   unsigned long now = millis();
   if (now - lastPressTime > 4000) {
